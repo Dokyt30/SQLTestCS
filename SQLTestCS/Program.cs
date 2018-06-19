@@ -15,30 +15,65 @@ namespace SQLTestCS
         static void Main(string[] args)
         {
             string constr = @"Data Source=localhost\SQLEXPRESS;Database=ydb1;Integrated Security=True";
+            string dbname = "";
 
-            SqlConnection con = new SqlConnection(constr);
-            con.Open();
-
-            try
             {
-                Console.WriteLine("connect");
+                SqlConnection con = new SqlConnection(constr);
+                con.Open();
 
-                string sqlstr = "select * from sysdatabases";
-                SqlCommand com = new SqlCommand(sqlstr, con);
-                SqlDataReader sdr = com.ExecuteReader();
-
-                Console.WriteLine("databaselist:");
-
-                while (sdr.Read() == true)
+                try
                 {
-                    string model = (string)sdr[0];
-                    Console.WriteLine(string.Format("{0}", model));
+                    Console.WriteLine("connect");
+
+                    {
+                        string sqlstr = "  SELECT * FROM sysobjects WHERE xtype = 'u'";
+                        SqlCommand com = new SqlCommand(sqlstr, con);
+                        SqlDataReader sdr = com.ExecuteReader();
+
+                        Console.WriteLine("databaselist:");
+
+                        while (sdr.Read() == true)
+                        {
+                            dbname = (string)sdr[0];
+                            Console.WriteLine(string.Format("{0}", dbname));
+
+
+                        }
+                    }
+
                 }
+                finally
+                {
+                    con.Close();
+                }
+
             }
-            finally
-            {
-                con.Close();
-            }
+
+            //{
+            //    SqlConnection con = new SqlConnection(constr);
+            //    con.Open();
+
+            //    try
+            //    {
+            //        Console.WriteLine("connect");
+
+            //        {
+            //            SqlCommand com2 = new SqlCommand("SELECT COUNT(*) FROM dbo." + dbname, con);
+            //            SqlDataReader sdr2 = com2.ExecuteReader();
+            //            while (sdr2.Read() == true)
+            //            {
+            //                //decimal cnt = (decimal)sdr2[0];
+            //                //Console.WriteLine(string.Format("{0}", cnt));
+            //            }
+            //        }
+
+            //    }
+            //    finally
+            //    {
+            //        con.Close();
+            //    }
+
+            //}
         }
     }
 }
