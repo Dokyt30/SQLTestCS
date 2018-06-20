@@ -49,6 +49,36 @@ namespace SQLTestCS
 
             }
 
+            {
+                SqlConnection con = new SqlConnection(constr);
+                con.Open();
+
+                try
+                {
+                    Console.WriteLine("connect");
+
+                    {
+                        string sqlstr = "select * from ydb1.dbo.ytbl1";
+                        SqlCommand com = new SqlCommand(sqlstr, con);
+                        SqlDataReader sdr = com.ExecuteReader();
+
+                        Console.WriteLine("databaselist:");
+
+                        while (sdr.Read() == true)
+                        {
+                            int uid = (int)sdr["uid"];
+                            string name = (string)sdr["name"];
+                            Console.WriteLine(string.Format("uid:{0} name:{1}", uid.ToString(), name));
+                        }
+                    }
+
+                }
+                finally
+                {
+                    con.Close();
+                }
+
+            }
             //{
             //    SqlConnection con = new SqlConnection(constr);
             //    con.Open();
